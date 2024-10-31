@@ -1,6 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from langchain_google_genai import ChatGoogleGenerativeAI
-import os, requests, ast
+import os, requests, time
 from dotenv import load_dotenv
 from pymilvus import MilvusClient, model
 
@@ -23,7 +23,10 @@ def fetch_documets(query):
     )
     docs = [doc["entity"]["text"] for doc in res[0]]
     return docs
-
+def generate(words):
+    for word in words:
+        yield f"{word} "  # Send the word followed by a space
+        time.sleep(0.05)  # Delay for demonstration (50ms)
 @app.route("/query", methods=["POST"])
 def query_response():
     data = request.json
@@ -48,10 +51,11 @@ def query_response():
         print(relevant_docs)
         query = "These are the relevant documents, " + str(relevant_docs) + "Based on this answer the query" + query
         res = llm.invoke(query)
-        print(res)
         
         content = res.content if hasattr(res, 'content') else "No content available" 
-        return jsonify({"content": content}), 200
+        
+
+        return Response(generate(content), content_type='text/plain', headers={'Transfer-Encoding': 'chunked'})
 
     except requests.RequestException as e:
         print(f"Error connecting to Gemini API: {e}")

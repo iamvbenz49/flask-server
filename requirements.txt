@@ -2,6 +2,6 @@ flask
 requests
 langchain
 langchain-google-genai
-dotenv
+python-dotenv
 pymilvus
-"pymilvus[model]"
+pymilvus[model]

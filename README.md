@@ -20,7 +20,8 @@ Ensure you have the following installed:
    
 2. **Activate virtual environment**:
    ```bash
-	 .  .venv/bin/activate
+     python -m venv .venv
+	 .venv/bin/activate
 	 pip install requirements.txt
 3. **Run DB scripts**:
    ```

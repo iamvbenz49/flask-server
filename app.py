@@ -66,14 +66,15 @@ def fetch_documents(query):
 
 
 def generate(words):
-    for word in words:
+    split_words=words.split(" ")
+    for word in split_words:
         yield f"{word} "
         time.sleep(0.05)
 
-@app.route("/query", methods=["POST"])
+@app.route("/retrieve", methods=["POST"])
 def query_response():
     data = request.json
-    query = data.get("query")
+    query = data.get("question")
 
     if not query:
         return jsonify({"error": "No query provided"}), 400
@@ -119,7 +120,7 @@ def query_title():
         )
         
         relevant_docs = fetch_documents(query)
-        query = f"This is the query: {query}. Based on this, provide a title {query}"
+        query = f"Generate a title (5 words max) for: {query}"
         res = llm.invoke(query)
         content = res.content if hasattr(res, 'content') else "No content available"
 

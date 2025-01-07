@@ -1,10 +1,7 @@
 flask
 requests
-langchain
-langchain-google-genai
 python-dotenv
 pymilvus
-pymilvus[model]
 langchain_google_genai
 transformers
 flask

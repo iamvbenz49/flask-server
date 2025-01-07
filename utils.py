@@ -1,21 +1,27 @@
-from transformers import AutoTokenizer, AutoModel
-import torch, os
+from pymilvus import model
+import os, requests
 from pymilvus import MilvusClient
 
 
-model_name = "bert-base-uncased" 
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModel.from_pretrained(model_name)
 url = os.getenv("URI")
+embedding_url = os.getenv("EMBEDDING_URL")
+hf_token = os.getenv("HF_TOKEN")
 client = MilvusClient(uri=url)
 
+
 def embedding_fn(queries):   
-    inputs = tokenizer(queries, return_tensors="pt", padding=True, truncation=True, max_length=512)
-    with torch.no_grad():
-        outputs = model(**inputs)
-    
-    embeddings = outputs.last_hidden_state.mean(dim=1)  
-    return embeddings.numpy()
+    headers = {
+        "Authorization": f"Bearer {hf_token}",
+        "Content-Type": "application/json",
+    }
+
+    payload = '{"inputs": "Deploying my first endpoint was an amazing experience."}'
+    response = requests.post(embedding_url, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return f"Error: {response.status_code}, {response.text}"
 
 
 def fetch_documents(query, collection_name = "demo_collection"):

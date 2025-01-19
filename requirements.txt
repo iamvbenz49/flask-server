@@ -3,6 +3,4 @@ requests
 python-dotenv
 pymilvus
 langchain_google_genai
-transformers
 flask
-torch

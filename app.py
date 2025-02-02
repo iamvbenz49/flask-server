@@ -10,7 +10,7 @@ app = Flask(__name__)
 def generate(words):
     split_words=words.split(" ")
     for word in split_words:
-        yield f"{word} "
+        yield f"{word}"
         time.sleep(0.05)
 
 
@@ -73,5 +73,4 @@ def query_title():
         print(f"Error connecting to Gemini API: {e}")
         return jsonify({"error": "Failed to connect to Gemini API"}), 500
 if __name__ == "__main__":
-    print("hello")
     app.run(debug=True)

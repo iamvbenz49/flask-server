@@ -4,3 +4,4 @@ python-dotenv
 pymilvus
 langchain_google_genai
 flask
+gunicorn
